@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="Spice Runners"
-run/main_scene="res://maps/tutorial/tutorial_level_01.tscn"
+run/main_scene="res://Main_Scene.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Thopter.svg"
+
+[autoload]
+
+GameManager="*res://Game_Manager.gd"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=540
 
 [input]
 

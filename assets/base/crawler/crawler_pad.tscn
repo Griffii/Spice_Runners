@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://omhicijnclmp"]
+
+[ext_resource type="Script" path="res://assets/base/crawler/crawler_pad.gd" id="1_61cnn"]
+[ext_resource type="Texture2D" uid="uid://58fyi852yift" path="res://assets/base/crawler/Crawler Pad_01.png" id="1_bpkch"]
+[ext_resource type="PackedScene" uid="uid://uokwfihdhco3" path="res://assets/base/crawler/crawler.tscn" id="2_00kh3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw8hg"]
+size = Vector2(57.5, 24)
+
+[node name="CrawlerPad" type="Area2D"]
+script = ExtResource("1_61cnn")
+
+[node name="PadSprite" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
+texture = ExtResource("1_bpkch")
+
+[node name="PadCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tw8hg")
+
+[node name="Crawler" parent="." instance=ExtResource("2_00kh3")]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

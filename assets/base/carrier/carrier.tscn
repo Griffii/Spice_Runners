@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://bvvaurnjwl1iq"]
+
+[ext_resource type="Script" path="res://assets/base/carrier/carrier.gd" id="1_1l36n"]
+[ext_resource type="Texture2D" uid="uid://cbsynantt7c2j" path="res://assets/base/carrier/Thopter_Shadow_03.png" id="2_eujmv"]
+[ext_resource type="Texture2D" uid="uid://dshpxj7hxmfu6" path="res://assets/base/carrier/Carrier_Sheet_01.png" id="2_ususr"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j7xon"]
+radius = 12.0
+height = 44.0
+
+[sub_resource type="Animation" id="Animation_ygdoe"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_ujfx8"]
+resource_name = "carrying"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("carrier_sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_ba7q2"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("carrier_sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pwtf4"]
+_data = {
+"RESET": SubResource("Animation_ygdoe"),
+"carrying": SubResource("Animation_ujfx8"),
+"idle": SubResource("Animation_ba7q2")
+}
+
+[node name="Carrier" type="Area2D" groups=["carriers"]]
+z_index = 1
+script = ExtResource("1_1l36n")
+
+[node name="carrier_collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -11)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_j7xon")
+
+[node name="shadow_sprite" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(4, 2)
+texture = ExtResource("2_eujmv")
+
+[node name="carrier_sprite" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(0, 3)
+texture = ExtResource("2_ususr")
+hframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pwtf4")
+}
+autoplay = "idle"
