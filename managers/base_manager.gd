@@ -6,21 +6,26 @@ extends Node2D
 @export var num_of_crawlers: int = 2
 @export var fuel: float = 0.0
 
-var max_spice_storage: float
-var current_spice_storage: float = 0.0 # Start with no spice at the beginning of the day
+var base_max_spice_storage: int
+var base_current_spice_storage: int = 0 # Start with no spice at the beginning of the day
 
 
 # Reference to the base components
 @export var thopter_pad_scene: PackedScene
 @export var crawler_pad_scene: PackedScene
 @export var carrier_pad_scene: PackedScene
-@export var spice_silo_01_scene: PackedScene
-@export var spice_silo_02_scene: PackedScene
-@export var spice_silo_03_scene: PackedScene
+@export var spice_silo_scene: PackedScene
+
 
 # Base Data
 var base_perimeter: CollisionShape2D
 var base_tiles: Array
+# Array for silo nodes
+@onready var silo_array: Array = []
+
+# called once at beginning of the game
+func _ready() -> void:
+	add_silo() # Adds 1 silo to the array
 
 
 # Function to load the base scene
@@ -30,6 +35,10 @@ func load_base() -> void:
 	spawn_thopter_pad()
 	spawn_carrier_pads()
 	spawn_crawler_pads()
+	spawn_spice_silos()
+	
+	set_max_storage()
+
 
 # Function to unload the current base
 func unload_base() -> void:
@@ -139,7 +148,7 @@ func spawn_carrier_pads():
 		var carrier_pad_instance = carrier_pad_scene.instantiate()
 		
 		# Calculate the spawn tile position
-		var tile_coords = Vector2i(-2, i)  # Increment the y-coordinate for each carrier pad
+		var tile_coords = Vector2i(-2,(-2 + i))  # Increment the y-coordinate for each carrier pad
 		var spawn_position = GameManager.level_manager.tile_data.map_to_local(tile_coords)  # Convert to global position
 		
 		#Offset the coords to line up with the perimeter and thopter
@@ -165,7 +174,7 @@ func spawn_crawler_pads():
 		var crawler_pad_instance = crawler_pad_scene.instantiate()
 		
 		# Calculate the spawn tile position
-		var tile_coords = Vector2i(1, i)  # Increment the y-coordinate for each carrier pad
+		var tile_coords = Vector2i(1,(-2 + i))  # Increment the y-coordinate for each carrier pad
 		var spawn_position = GameManager.level_manager.tile_data.map_to_local(tile_coords)  # Convert to global position
 		
 		#Offset the coords to line up with the perimeter and thopter
@@ -179,10 +188,56 @@ func spawn_crawler_pads():
 		
 		print("Crawler pad spawned at tile:", tile_coords, "Global position:", spawn_position)
 
-# Add spice to the base storage
-func add_spice(amount: int) -> int:
-	var remaining_capacity = max_spice_storage - current_spice_storage
-	var added_spice = min(amount, remaining_capacity)
-	current_spice_storage += added_spice
-	print("Added ", added_spice, " spice to base. Current storage: ", current_spice_storage, "/", max_spice_storage)
-	return added_spice
+func spawn_spice_silos():
+	# Check the silo array and spawn silos accordingly
+	if silo_array.size() == 0:
+		print("No silos available. That doesn't seem right...")
+	else:
+		for i in silo_array:
+			var new_silo_instance = i
+			
+			# Add the instance to the Base Manager
+			add_child(new_silo_instance)
+
+
+# Add a silo to the array
+func add_silo():
+	# Check if the PackedScene is set
+	if not spice_silo_scene:
+		print("Spice silo scene is not set!")
+		return
+	
+	# Instantiate the spice silo scene
+	var silo = spice_silo_scene.instantiate()
+	
+	# Add it to the array
+	silo_array.append(silo)
+	
+	# Calculate the position based on the size of the array
+	var index = silo_array.size() - 1  # Current index (0-based)
+	var tile_x = (index % 5) - 2  # Calculate x-coord (-2 to 2, based on 5 tiles per row)
+	var tile_y = (index / 5) + 1  # Calculate y-coord (1-based, increments every 5 silos)
+	
+	# Assign the position 
+	silo.position = Vector2(tile_x, tile_y) * 32  # 32px grid size
+
+# Check the silo array and set the bases max storage capacity by adding silo storage capacities
+func set_max_storage():
+	var storage: int = 0
+	for i in silo_array:
+		storage += i.max_storage
+	
+	base_max_spice_storage = storage
+
+# Add spice to the base storage:
+# Select a silo and send the spice to that silos "recieve_spice(int)" function
+func add_spice(amount: int):
+	# Take the amount and pass it through the spice silo array filling them up as it goes
+	var spice_to_deposit = amount
+	for i in silo_array:
+		if spice_to_deposit == 0:
+			return
+		spice_to_deposit = i.receive_spice(spice_to_deposit)
+	
+	if spice_to_deposit != 0:
+		print(spice_to_deposit, " spice was unable to be stored.")

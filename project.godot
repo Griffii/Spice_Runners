@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Spice Runners"
-run/main_scene="res://Main_Scene.tscn"
+run/main_scene="res://managers/Main_Scene.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://Thopter.svg"
 
 [autoload]
 
-GameManager="*res://Game_Manager.gd"
+GameManager="*res://managers/Game_Manager.gd"
 
 [display]
 

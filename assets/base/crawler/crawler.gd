@@ -79,7 +79,8 @@ func process_mining(delta: float) -> void:
 	mining_tick += delta
 	
 	if mining_tick >= 1.0:  # Collect spice every second
-		current_spice = min(current_spice + mining_rate, max_storage)
+		# Increase spice in crawler storage
+		current_spice += mining_rate
 		print("Mining... Current Spice: ", current_spice, "/", max_storage)
 		# Deplete available spice
 		GameManager.level_manager.reduce_spice_at_tile(global_position, mining_rate)
@@ -113,7 +114,7 @@ func search_for_spice():
 
 # Move to a new spice tile
 func move_to_target(delta: float, target_position: Vector2):
-	print("Moving from: ", global_position, " to: ", target_position)
+	##print("Moving from: ", global_position, " to: ", target_position)
 	global_position = global_position.move_toward(target_position, travel_speed * delta)
 
 # Check if arrived at target position

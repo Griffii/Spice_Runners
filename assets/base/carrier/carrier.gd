@@ -3,9 +3,9 @@ extends Area2D
 # Carrier Properties
 @export var speed: float = 50.0  # Movement speed
 @export var arrival_distance: float = 1.0  # Distance at which the carrier "arrives"
-@export var max_altitude: float = 13.0  # Maximum height
+@export var max_altitude: float = 15.0  # Maximum height
 @export var payload_drop_delay: float = 1.0  # Delay before dropping payload
-@export var payload_altitude: float = 8.0  # Altitude when dropping or grabbing payload
+@export var payload_altitude: float = 12.0  # Altitude when dropping or grabbing payload
 @export var landing_altitude: float = 0.0
 @export var altitude_change_speed: float = 2.0  # Speed of altitude adjustment
 
@@ -188,6 +188,6 @@ func update_sprite_position() -> void:
 	
 	# Offset the payload if attached     ## -55 for carrier, -25 for crawler works great. I don't know why
 	if payload_attached and payload:
-		var max_crawler_offset = -25
+		var max_crawler_offset = -5
 		var crawler_offset = (altitude - payload_altitude) / (max_altitude - payload_altitude) * max_crawler_offset
 		payload.global_position = global_position + Vector2(0, crawler_offset)
