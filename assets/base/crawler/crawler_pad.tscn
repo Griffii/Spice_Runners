@@ -20,3 +20,4 @@ shape = SubResource("RectangleShape2D_tw8hg")
 [node name="Crawler" parent="." instance=ExtResource("2_00kh3")]
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

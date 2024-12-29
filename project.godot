@@ -24,6 +24,10 @@ GameManager="*res://managers/Game_Manager.gd"
 window/size/viewport_width=960
 window/size/viewport_height=540
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 up={

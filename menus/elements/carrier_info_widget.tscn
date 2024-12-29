@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://brial71mr7hvl"]
+
+[ext_resource type="Script" path="res://menus/elements/carrier_info_widget.gd" id="1_1xipc"]
+[ext_resource type="Texture2D" uid="uid://cag14w485jen6" path="res://menus/ui sprites/Carrier_Image.png" id="1_rox4x"]
+
+[node name="Carrier_Info_Widget" type="MarginContainer"]
+offset_right = 185.0
+offset_bottom = 60.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_1xipc")
+
+[node name="Carrier Info" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Machine #" type="Label" parent="Carrier Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "01"
+
+[node name="Icon" type="TextureRect" parent="Carrier Info"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+texture = ExtResource("1_rox4x")
+expand_mode = 1
+
+[node name="Labels" type="VBoxContainer" parent="Carrier Info"]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="Carrier Info/Labels"]
+layout_mode = 2
+text = "Idle"
+
+[node name="Fuel" type="Label" parent="Carrier Info/Labels"]
+layout_mode = 2
+text = "Fuel: xxx"

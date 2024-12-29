@@ -12,9 +12,11 @@ grow_vertical = 2
 script = ExtResource("1_xu8g3")
 
 [node name="StartButton" type="Button" parent="."]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+layout_mode = 1
+offset_left = 424.5
+offset_top = 254.5
+offset_right = 535.5
+offset_bottom = 285.5
 text = "Start Tutorial"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

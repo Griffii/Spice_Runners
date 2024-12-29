@@ -33,6 +33,7 @@ animations = [{
 
 [node name="Thopter" type="CharacterBody2D"]
 z_index = 5
+collision_mask = 2
 script = ExtResource("1_su76k")
 beacon_scene = ExtResource("2_fbe0w")
 

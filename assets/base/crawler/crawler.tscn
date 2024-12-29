@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://uokwfihdhco3"]
+[gd_scene load_steps=9 format=3 uid="uid://uokwfihdhco3"]
 
 [ext_resource type="Script" path="res://assets/base/crawler/crawler.gd" id="1_p1yir"]
+[ext_resource type="PackedScene" uid="uid://d3g5ncq5cbkt6" path="res://menus/elements/crawler_info_widget.tscn" id="2_c7mh8"]
 [ext_resource type="Texture2D" uid="uid://eileg3nio1t7" path="res://assets/base/crawler/crawler_sheet_01.png" id="2_nal04"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_86enn"]
@@ -64,10 +65,41 @@ _data = {
 [node name="Crawler" type="Area2D" groups=["crawlers"]]
 z_index = 1
 script = ExtResource("1_p1yir")
+crawler_ui_widget_scene = ExtResource("2_c7mh8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -20)
 shape = SubResource("CapsuleShape2D_86enn")
+
+[node name="SpiceMeterBack" type="ColorRect" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -5.0
+offset_right = 12.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 3.14159
+color = Color(0, 0, 0, 1)
+
+[node name="SpiceMeter" type="ColorRect" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -5.0
+offset_right = 12.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 3.14159
+color = Color(1, 0.74902, 0.0705882, 1)
 
 [node name="CrawlerSprite" type="Sprite2D" parent="."]
 position = Vector2(0, -18)

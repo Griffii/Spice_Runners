@@ -18,8 +18,10 @@ var thopter_altitude: float = 0.0
 @onready var thopter_collision: CollisionShape2D = $ThopterCollision
 @onready var camera: Camera2D = $Camera2D
 
+
 # Packed Scenes
 @export var beacon_scene: PackedScene  # Assign the Beacon Scene in the Inspector
+
 
 
 func _ready() -> void:
@@ -97,10 +99,10 @@ func move_player(delta: float) -> void:
 	thopter_collision.position.y = y_offset
 	
 	# Handle turning off collision at greater altitudes
-	if thopter_altitude > 3.0:
-		thopter_collision.disabled = true
-	else:
-		thopter_collision.disabled = false
+	#if thopter_altitude > 3.0:
+	#	thopter_collision.disabled = true
+	#else:
+	#	thopter_collision.disabled = false
 	
 	# Debug print for altitude and speed
 	##print("Altitude: ", thopter_altitude, " | Speed: ", current_speed)
@@ -123,6 +125,7 @@ func update_camera():
 	var min_zoom = Vector2(3.0, 3.0)  # Closest zoom at low altitude
 	var max_zoom = Vector2(1.0, 1.0)  # Farthest zoom at high altitude
 	camera.zoom = min_zoom.lerp(max_zoom, thopter_altitude / max_thopter_altitude)
+
 
 
 ## Abilities

@@ -18,6 +18,8 @@ func get_current_map() -> TileMapLayer:
 	var current_map = level_manager.get_level_tile_data()
 	return current_map
 
+
+
 ###############################################################################
 ###
 ###       In Game Functions

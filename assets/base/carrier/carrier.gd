@@ -10,6 +10,7 @@ extends Area2D
 @export var altitude_change_speed: float = 2.0  # Speed of altitude adjustment
 
 # Carrier Properties
+var carrier_id = 99
 var altitude: float = 0.0  # Current altitude of the carrier
 var takeoff_in_progress: bool = false # Check if take off in in progress
 var target_position: Vector2
@@ -25,9 +26,14 @@ var payload_attached: bool = false
 
 # Other node references
 @onready var platform: Area2D = get_parent() # Reference to the landing pad
+@export var carrier_ui_widget_scene: PackedScene
 
 # States
 var state: String = "idle"  # States: "idle", "picking_up", "delivering", "returning"
+
+
+func _ready() -> void:
+	load_ui_widget()
 
 func _process(delta: float) -> void:
 	# Update visual effects
@@ -153,11 +159,17 @@ func pick_up_payload() -> void:
 		set_target_position(beacon_ping_position) # Change target to the beacon ping
 
 func drop_payload() -> void:
-	print("Dropping payload...")
 	if payload:
+		print("Dropping payload: ", payload.name)
+		# Check if payload is overlapping it's pad, if so, prompt the payload to attach to pad
+		if payload.platform.is_docked ==true:
+			print("Payload docked, unloading.")
+			payload.platform.unload_spice(payload)
+		else:
+			payload.start_mining()
+		
 		animplayer.play("idle")
-		# Prompt the crawler to mine
-		payload.start_mining()
+		
 		# Release the payload after prompting the crawler to start mining
 		payload_attached = false
 		payload = null
@@ -186,8 +198,31 @@ func update_sprite_position() -> void:
 	carrier_sprite.position.y = y_offset
 	collision.position.y = y_offset # Move collision body too
 	
-	# Offset the payload if attached     ## -55 for carrier, -25 for crawler works great. I don't know why
+	# Offset the payload if attached     
 	if payload_attached and payload:
 		var max_crawler_offset = -5
 		var crawler_offset = (altitude - payload_altitude) / (max_altitude - payload_altitude) * max_crawler_offset
 		payload.global_position = global_position + Vector2(0, crawler_offset)
+
+
+func load_ui_widget():
+	var game_ui = GameManager.ui_manager.get_game_ui()
+	
+	# Ensure game_ui and its container are valid
+	if game_ui:
+		var carrier_info_container = game_ui.get_node("CarrierInfoContainer") as VBoxContainer
+		
+		if carrier_info_container:
+			# Instantiate the UI widget
+			var ui_widget = carrier_ui_widget_scene.instantiate()
+			# Connect the widget to the carrier
+			ui_widget.set_carrier(self)
+			# Add the widget as a child of the container
+			carrier_info_container.add_child(ui_widget)
+		else:
+			print("CarrierInfoContainer not found!")
+	else:
+		print("Game UI is not loaded! Retrying...")
+		# Retry after a short delay
+		await get_tree().create_timer(0.1).timeout
+		load_ui_widget()

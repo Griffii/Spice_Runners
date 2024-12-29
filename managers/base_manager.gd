@@ -2,12 +2,12 @@ extends Node2D
 
 # Base Properties - User Controlled
 @export var level: int = 0
-@export var num_of_carriers: int = 2
+@export var num_of_carriers: int = 1
 @export var num_of_crawlers: int = 2
 @export var fuel: float = 0.0
 
-var base_max_spice_storage: int
-var base_current_spice_storage: int = 0 # Start with no spice at the beginning of the day
+var base_max_spice_storage: float
+#var base_current_spice_storage: float = 0.0 # Start with no spice at the beginning of the day
 
 
 # Reference to the base components
@@ -48,7 +48,7 @@ func unload_base() -> void:
 
 #################
 ## Logic to dynamically load parts of the bas in based on upgrades etc
-
+#################
 
 func create_base_perimeter():
 	# Check if the base_perimeter node exists
@@ -160,6 +160,9 @@ func spawn_carrier_pads():
 		# Add the instance to the Base Manager
 		add_child(carrier_pad_instance)
 		
+		# Set Carrier ID
+		carrier_pad_instance.carrier.carrier_id = (i + 1)
+		
 		print("Carrier pad spawned at tile:", tile_coords, "Global position:", spawn_position)
 
 func spawn_crawler_pads():
@@ -185,6 +188,10 @@ func spawn_crawler_pads():
 		
 		# Add the instance to the Base Manager
 		add_child(crawler_pad_instance)
+		
+		# Set Crawler ID and Name
+		crawler_pad_instance.crawler.crawler_id = (i + 1)
+		crawler_pad_instance.crawler.crawler_name = "Crawler " + str(crawler_pad_instance.crawler.crawler_id)
 		
 		print("Crawler pad spawned at tile:", tile_coords, "Global position:", spawn_position)
 
@@ -231,13 +238,23 @@ func set_max_storage():
 
 # Add spice to the base storage:
 # Select a silo and send the spice to that silos "recieve_spice(int)" function
-func add_spice(amount: int):
+func add_spice(amount: float):
 	# Take the amount and pass it through the spice silo array filling them up as it goes
 	var spice_to_deposit = amount
 	for i in silo_array:
-		if spice_to_deposit == 0:
-			return
-		spice_to_deposit = i.receive_spice(spice_to_deposit)
+		print("Adding Spice to Silo: ", i.name)
+		if spice_to_deposit == 0.0:
+			print("All spice stored.")
+			
+		spice_to_deposit =- i.receive_spice(spice_to_deposit)
 	
-	if spice_to_deposit != 0:
+	if spice_to_deposit > 0:
 		print(spice_to_deposit, " spice was unable to be stored.")
+
+
+func get_stored_spice_amount() -> int:
+	var total_spice = 0.0
+	for i in silo_array:
+		total_spice += i.current_storage
+	
+	return total_spice

@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqp20kskt3vv6"]
+
+[ext_resource type="Script" path="res://menus/game_ui.gd" id="1_fik3h"]
+
+[node name="Game UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fik3h")
+
+[node name="CrawlerInfoContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_right = 1.0
+anchor_bottom = 0.7
+grow_horizontal = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="CarrierInfoContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 0.7
+metadata/_edit_use_anchors_ = true
+
+[node name="RadioChatterContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.7
+anchor_right = 0.2
+anchor_bottom = 1.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Radio Box Background" type="ColorRect" parent="RadioChatterContainer"]
+layout_mode = 2
+color = Color(0.27451, 0.117647, 0, 0.745098)
+
+[node name="MarginContainer" type="MarginContainer" parent="RadioChatterContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RadioLabel" type="Label" parent="RadioChatterContainer/MarginContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 16
+vertical_alignment = 2
+autowrap_mode = 3
+
+[node name="RadioButton" type="Button" parent="RadioChatterContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+text = "Print Radio Chatter"
+
+[node name="RightSideContainer" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect3" type="ColorRect" parent="RightSideContainer"]
+layout_mode = 2
+color = Color(1, 1, 1, 0.235294)
+
+[node name="CenterScreenContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.9
+anchor_right = 0.75
+anchor_bottom = 1.0
+alignment = 1
+
+[node name="MoneyLabel" type="Label" parent="CenterScreenContainer"]
+layout_mode = 2
+text = "$ 000,000.00"
+
+[node name="VSeparator" type="VSeparator" parent="CenterScreenContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SpiceLabel" type="Label" parent="CenterScreenContainer"]
+layout_mode = 2
+text = "Spice: "
+
+[connection signal="pressed" from="RadioChatterContainer/RadioButton" to="." method="_on_radio_button_pressed"]

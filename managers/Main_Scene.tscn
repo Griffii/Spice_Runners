@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cb06d6loyq3b4"]
+[gd_scene load_steps=9 format=3 uid="uid://cb06d6loyq3b4"]
 
 [ext_resource type="Script" path="res://managers/level_manager.gd" id="1_xbt8r"]
 [ext_resource type="Script" path="res://managers/base_manager.gd" id="2_c3ga6"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://8x3l20tx06gf" path="res://assets/base/carrier/carrier_pad.tscn" id="5_3xxyn"]
 [ext_resource type="PackedScene" uid="uid://bbehwcg7meql" path="res://assets/base/spice_silos/spice_silo.tscn" id="6_5scct"]
 [ext_resource type="Script" path="res://managers/ui_manager.gd" id="6_bftj6"]
+[ext_resource type="PackedScene" uid="uid://cqp20kskt3vv6" path="res://menus/game_ui.tscn" id="8_ghdkq"]
 
 [node name="Main_Scene" type="Node2D"]
 
@@ -22,5 +23,8 @@ spice_silo_scene = ExtResource("6_5scct")
 
 [node name="UI_Manager" type="Node2D" parent="."]
 script = ExtResource("6_bftj6")
+in_game_ui = ExtResource("8_ghdkq")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UI_Manager"]
 
 [node name="Audio_Manager" type="Node2D" parent="."]

@@ -1,33 +1,104 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbehwcg7meql"]
+[gd_scene load_steps=9 format=3 uid="uid://bbehwcg7meql"]
 
 [ext_resource type="Script" path="res://assets/base/spice_silos/spice_silo.gd" id="1_v3kn0"]
-[ext_resource type="Texture2D" uid="uid://dajxxrki22m01" path="res://assets/base/spice_silos/Spice_Silo_Level01.png" id="2_3l5kp"]
+[ext_resource type="Texture2D" uid="uid://cxnhcnsqu7d50" path="res://assets/base/spice_silos/Spice_Silo_All_Sheet.png" id="2_hiood"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vkfhv"]
 size = Vector2(29, 19)
+
+[sub_resource type="Animation" id="Animation_jpf7x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Silo_Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_shbgn"]
+resource_name = "lvl_1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Silo_Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_hkyvd"]
+resource_name = "lvl_2"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Silo_Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_yq04l"]
+resource_name = "lvl_3"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Silo_Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rup1o"]
+_data = {
+"RESET": SubResource("Animation_jpf7x"),
+"lvl_1": SubResource("Animation_shbgn"),
+"lvl_2": SubResource("Animation_hkyvd"),
+"lvl_3": SubResource("Animation_yq04l")
+}
 
 [node name="SpiceSilo" type="Area2D"]
 script = ExtResource("1_v3kn0")
 
 [node name="Silo1_spice" type="ColorRect" parent="."]
-offset_left = -8.0
-offset_top = -3.0
-offset_right = -6.0
-offset_bottom = 8.0
+offset_left = -6.0
+offset_top = 8.0
+offset_right = -4.0
+offset_bottom = 19.0
+rotation = 3.14159
 color = Color(1, 1, 0, 1)
 
 [node name="Silo2_spice" type="ColorRect" parent="."]
-offset_left = 2.0
-offset_top = -3.0
-offset_right = 4.0
-offset_bottom = 8.0
+offset_left = 4.0
+offset_top = 8.0
+offset_right = 6.0
+offset_bottom = 19.0
+rotation = 3.14159
 color = Color(1, 1, 0, 1)
 
 [node name="Silo3_spice" type="ColorRect" parent="."]
-offset_left = 12.0
-offset_top = -3.0
-offset_right = 14.0
-offset_bottom = 8.0
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 19.0
+rotation = 3.14159
 color = Color(1, 1, 0, 1)
 
 [node name="lvl1_collision" type="CollisionShape2D" parent="."]
@@ -35,4 +106,24 @@ position = Vector2(0.5, 1.5)
 shape = SubResource("RectangleShape2D_vkfhv")
 
 [node name="Silo_Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_3l5kp")
+texture = ExtResource("2_hiood")
+hframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rup1o")
+}
+
+[node name="StorageLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -12.0
+offset_top = 12.0
+offset_right = 27.0
+offset_bottom = 29.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 8
+text = "0|0|0"
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
