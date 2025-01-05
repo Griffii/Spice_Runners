@@ -12,6 +12,7 @@ extends Area2D
 # Carrier Properties
 var carrier_id = 99
 var altitude: float = 0.0  # Current altitude of the carrier
+var is_flying: bool = false
 var takeoff_in_progress: bool = false # Check if take off in in progress
 var target_position: Vector2
 var beacon_ping_position: Vector2
@@ -23,6 +24,7 @@ var payload_attached: bool = false
 @onready var carrier_sprite: Sprite2D = $carrier_sprite
 @onready var collision: CollisionShape2D = $carrier_collision
 @onready var animplayer: AnimationPlayer = $AnimationPlayer
+@onready var engine_noise: AudioStreamPlayer2D = $audio_engine
 
 # Other node references
 @onready var platform: Area2D = get_parent() # Reference to the landing pad
@@ -39,6 +41,7 @@ func _process(delta: float) -> void:
 	# Update visual effects
 	update_shadow()
 	update_sprite_position()
+	manage_sound()
 	
 	# State Switcher
 	match state:
@@ -141,6 +144,7 @@ func process_landing(reason: String, delta: float) -> void:
 # State: Idle
 func idle():
 	animplayer.play("idle")
+	engine_noise.stop()
 
 func move_to_target(delta: float) -> void:
 	# Move towards the target position
@@ -204,6 +208,21 @@ func update_sprite_position() -> void:
 		var crawler_offset = (altitude - payload_altitude) / (max_altitude - payload_altitude) * max_crawler_offset
 		payload.global_position = global_position + Vector2(0, crawler_offset)
 
+# Manage SFX
+func manage_sound():
+	# Check altitude and call animation changes if it lands or takes off
+	if altitude == 0.0:
+		if is_flying == true:
+			is_flying = false
+			engine_noise.stop() ## This is broken but whatever, calling idle() also stops the sound
+		else:
+			pass
+	else:
+		if is_flying == false:
+			is_flying = true
+			engine_noise.play()
+		else:
+			pass
 
 func load_ui_widget():
 	var game_ui = GameManager.ui_manager.get_game_ui()
@@ -219,6 +238,7 @@ func load_ui_widget():
 			ui_widget.set_carrier(self)
 			# Add the widget as a child of the container
 			carrier_info_container.add_child(ui_widget)
+			print("Loaded Carrier Widget.")
 		else:
 			print("CarrierInfoContainer not found!")
 	else:

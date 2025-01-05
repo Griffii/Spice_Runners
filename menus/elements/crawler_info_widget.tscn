@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3g5ncq5cbkt6"]
+[gd_scene load_steps=4 format=3 uid="uid://d3g5ncq5cbkt6"]
 
 [ext_resource type="Script" path="res://menus/elements/crawler_info_widget.gd" id="1_dtujg"]
 [ext_resource type="Texture2D" uid="uid://cl5n8sn16tyww" path="res://menus/ui sprites/Crawler_Image.png" id="1_lrlyd"]
+[ext_resource type="FontFile" uid="uid://dwqlkti7py28c" path="res://assets/fonts/Dune_Rise.ttf" id="2_14a8h"]
 
 [node name="Crawler_Info_Widget" type="MarginContainer"]
 offset_right = 170.0
@@ -17,6 +18,7 @@ layout_mode = 2
 
 [node name="Machine #" type="Label" parent="Crawler Info"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_14a8h")
 theme_override_font_sizes/font_size = 32
 text = "01"
 
@@ -30,11 +32,14 @@ expand_mode = 1
 
 [node name="Labels" type="VBoxContainer" parent="Crawler Info"]
 layout_mode = 2
+alignment = 1
 
 [node name="Status" type="Label" parent="Crawler Info/Labels"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_14a8h")
 text = "Mining"
 
 [node name="Spice" type="Label" parent="Crawler Info/Labels"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_14a8h")
 text = "120 / 500"

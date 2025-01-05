@@ -1,14 +1,14 @@
-extends Area2D
+class_name silo extends Area2D
 
 @export var silo_level: int = 1
-@export var max_storage: int = 1500
-@export var single_silo_storage: int = 500
+@export var max_storage: float = 1500.0
+@export var single_silo_storage: float = 500.0
 
-var current_storage: int = 0
+var current_storage: float = 0.0
 
-var silo1_storage: int = 0
-var silo2_storage: int = 0
-var silo3_storage: int = 0
+var silo1_storage: float = 0.0
+var silo2_storage: float = 0.0
+var silo3_storage: float = 0.0
 
 var spice_meter_max
 @onready var silo1_spice: ColorRect = $Silo1_spice
@@ -52,13 +52,19 @@ func load_silo():
 		silo2_spice.position.y = silo_lvl2_y
 		silo3_spice.position.y = silo_lvl2_y
 		
-		# Empty silos of spice on spawn (Set color rects to 0)
-		silo1_spice.size.y = 0
-		silo2_spice.size.y = 0
-		silo3_spice.size.y = 0
+		# Empty silos of spice on spawn 
+		silo1_storage = 0.0
+		silo2_storage = 0.0
+		silo3_storage = 0.0
+		
+		max_storage = 3000.0
+		single_silo_storage = 1000.0
 	
 	elif silo_level == 3:
 		animplayer.play("lvl_3")
+		## Add meter control for large silo later
+		
+		max_storage = 5000.0
 	
 	else:
 		animplayer.play("lvl_1")
@@ -68,10 +74,13 @@ func load_silo():
 		silo1_spice.position.x = silo1_x
 		silo2_spice.position.x = silo2_x
 		silo3_spice.position.x = silo3_x
-		# Empty silos of spice on spawn (Set color rects to 0)
-		silo1_spice.size.y = 0
-		silo2_spice.size.y = 0
-		silo3_spice.size.y = 0
+		# Empty silos of spice on spawn 
+		silo1_storage = 0.0
+		silo2_storage = 0.0
+		silo3_storage = 0.0
+		
+		max_storage = 1500.0
+		single_silo_storage = 500.0
 
 
 # Checks how much spice storage there is, takes it from the pad and returns the leftover amount

@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bvvaurnjwl1iq"]
+[gd_scene load_steps=11 format=3 uid="uid://bvvaurnjwl1iq"]
 
 [ext_resource type="Script" path="res://assets/base/carrier/carrier.gd" id="1_1l36n"]
 [ext_resource type="Texture2D" uid="uid://cbsynantt7c2j" path="res://assets/base/carrier/Thopter_Shadow_03.png" id="2_eujmv"]
 [ext_resource type="PackedScene" uid="uid://brial71mr7hvl" path="res://menus/elements/carrier_info_widget.tscn" id="2_qrxkw"]
 [ext_resource type="Texture2D" uid="uid://dshpxj7hxmfu6" path="res://assets/base/carrier/Carrier_Sheet_01.png" id="2_ususr"]
+[ext_resource type="AudioStream" uid="uid://nenpyvslnwe5" path="res://assets/base/carrier/Carrier_Flying_01.mp3" id="5_crhgv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j7xon"]
 radius = 12.0
@@ -75,3 +76,9 @@ libraries = {
 "": SubResource("AnimationLibrary_pwtf4")
 }
 autoplay = "idle"
+
+[node name="audio_engine" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_crhgv")
+max_distance = 600.0
+attenuation = 2.0
+parameters/looping = true

@@ -1,35 +1,69 @@
-[gd_scene load_steps=9 format=3 uid="uid://dliqg7x51xwf"]
+[gd_scene load_steps=11 format=3 uid="uid://dliqg7x51xwf"]
 
 [ext_resource type="Script" path="res://assets/base/thopter/thopter.gd" id="1_su76k"]
 [ext_resource type="PackedScene" uid="uid://bfijwnjccqrs4" path="res://assets/resources/markers/beacon/beacon_01.tscn" id="2_fbe0w"]
 [ext_resource type="Texture2D" uid="uid://g73hg47aa4ep" path="res://assets/base/thopter/sprites/Thopter_Shadow_03.png" id="3_dbbwu"]
 [ext_resource type="Texture2D" uid="uid://diprg7o1ut84c" path="res://assets/base/thopter/sprites/Thopter_Sheet_01.png" id="4_gi3fc"]
+[ext_resource type="AudioStream" uid="uid://b8m04vwh0eam5" path="res://assets/base/thopter/sounds/Thopter_Flying_02.mp3" id="5_osmlc"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_r8dvb"]
 radius = 3.0
 height = 20.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_peoje"]
-atlas = ExtResource("4_gi3fc")
-region = Rect2(0, 0, 64, 64)
+[sub_resource type="Animation" id="Animation_mco8g"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kigxm"]
-atlas = ExtResource("4_gi3fc")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="Animation" id="Animation_ynybm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_6lai6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_peoje")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kigxm")
-}],
-"loop": true,
-"name": &"default",
-"speed": 30.0
-}]
+[sub_resource type="Animation" id="Animation_6uiju"]
+resource_name = "fly"
+length = 0.06
+loop_mode = 1
+step = 0.03
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.030303),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_id5gq"]
+_data = {
+"RESET": SubResource("Animation_ynybm"),
+"fly": SubResource("Animation_6uiju"),
+"idle": SubResource("Animation_mco8g")
+}
 
 [node name="Thopter" type="CharacterBody2D"]
 z_index = 5
@@ -44,13 +78,15 @@ shape = SubResource("CapsuleShape2D_r8dvb")
 [node name="ShadowSprite" type="Sprite2D" parent="."]
 texture = ExtResource("3_dbbwu")
 
-[node name="BodySprite" type="AnimatedSprite2D" parent="."]
+[node name="BodySprite" type="Sprite2D" parent="."]
 position = Vector2(0, -1)
-sprite_frames = SubResource("SpriteFrames_6lai6")
-autoplay = "default"
-frame_progress = 0.386446
+texture = ExtResource("4_gi3fc")
+hframes = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_id5gq")
+}
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
@@ -59,3 +95,8 @@ drag_horizontal_enabled = true
 drag_vertical_enabled = true
 drag_left_margin = 0.4
 drag_right_margin = 0.4
+
+[node name="Audio_Engine" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_osmlc")
+volume_db = 8.0
+parameters/looping = true

@@ -11,12 +11,15 @@ extends CharacterBody2D
 
 # Starting Altitude - 0 for landed
 var thopter_altitude: float = 0.0
+var is_flying: bool = false
 
 # Node References
 @onready var shadow_sprite: Sprite2D = $ShadowSprite
-@onready var thopter_sprite: AnimatedSprite2D = $BodySprite
+@onready var thopter_sprite: Sprite2D = $BodySprite
 @onready var thopter_collision: CollisionShape2D = $ThopterCollision
 @onready var camera: Camera2D = $Camera2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var engine_noise: AudioStreamPlayer2D = $Audio_Engine
 
 
 # Packed Scenes
@@ -26,6 +29,7 @@ var thopter_altitude: float = 0.0
 
 func _ready() -> void:
 	print("Thopter ready!")
+	
 
 
 func _physics_process(delta: float) -> void:
@@ -38,13 +42,17 @@ func _physics_process(delta: float) -> void:
 	
 	# Beacon handler
 	handle_beacon_placement()
+	# Anim and SFX
+	manage_anim_and_sound()
 	
-	# Turn off animation if altitude is 0.0
-	if thopter_altitude == 0.0:
-		thopter_sprite.stop()
-	else:
-		thopter_sprite.play()
 
+func _process(delta: float) -> void:
+	# Toggle End Day button - If game_ui is loaded
+	if GameManager.ui_manager.game_ui_instance:
+		if thopter_altitude == 0 and check_base_landing():
+			GameManager.ui_manager.end_day_button.visible = true
+		else:
+			GameManager.ui_manager.end_day_button.visible = false
 
 
 ## Movement Logic ##
@@ -126,6 +134,41 @@ func update_camera():
 	var max_zoom = Vector2(1.0, 1.0)  # Farthest zoom at high altitude
 	camera.zoom = min_zoom.lerp(max_zoom, thopter_altitude / max_thopter_altitude)
 
+## Manage animations and SFX
+func manage_anim_and_sound():
+	# Check altitude and call animation changes if it lands or takes off
+	if thopter_altitude == 0.0:
+		if is_flying == true:
+			is_flying = false
+			animation_player.play("idle")
+			engine_noise.stop()
+		else:
+			pass
+	else:
+		if is_flying == false:
+			is_flying = true
+			animation_player.play("fly")
+			engine_noise.play()
+	
+	# Adjust audio level based on altitude
+	var min_db = 1
+	var max_db = 5
+	var audio_adjustment = min_db + (thopter_altitude/10.0) * (max_db - min_db)
+	
+	engine_noise.volume_db = audio_adjustment
+
+## Check if player is landed at base
+func check_base_landing() -> bool:
+	var base_tiles = GameManager.base_manager.base_tiles
+	var current_tile = GameManager.level_manager.coord_to_grid(position)
+	
+	## DEBUG
+	#print("Current Thopter Tile: ", current_tile)
+	
+	if base_tiles.has(current_tile):
+		return true
+	else:
+		return false
 
 
 ## Abilities

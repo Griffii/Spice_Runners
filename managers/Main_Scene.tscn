@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cb06d6loyq3b4"]
+[gd_scene load_steps=10 format=3 uid="uid://cb06d6loyq3b4"]
 
 [ext_resource type="Script" path="res://managers/level_manager.gd" id="1_xbt8r"]
 [ext_resource type="Script" path="res://managers/base_manager.gd" id="2_c3ga6"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bbehwcg7meql" path="res://assets/base/spice_silos/spice_silo.tscn" id="6_5scct"]
 [ext_resource type="Script" path="res://managers/ui_manager.gd" id="6_bftj6"]
 [ext_resource type="PackedScene" uid="uid://cqp20kskt3vv6" path="res://menus/game_ui.tscn" id="8_ghdkq"]
+[ext_resource type="PackedScene" uid="uid://c02la0pxd8t1m" path="res://menus/day_end_screen.tscn" id="9_wlkts"]
 
 [node name="Main_Scene" type="Node2D"]
 
@@ -24,6 +25,7 @@ spice_silo_scene = ExtResource("6_5scct")
 [node name="UI_Manager" type="Node2D" parent="."]
 script = ExtResource("6_bftj6")
 in_game_ui = ExtResource("8_ghdkq")
+day_end_scene = ExtResource("9_wlkts")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="UI_Manager"]
 

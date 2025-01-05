@@ -1,19 +1,20 @@
 extends Control
 
-
+@onready var money_label: Label = $CenterScreenContainer/MoneyLabel
 @onready var spice_amount_label: Label = $CenterScreenContainer/SpiceLabel
 @onready var radio_label: Label = $RadioChatterContainer/MarginContainer/RadioLabel
 
-# Maximum number of lines to keep in the debug label
+
+# Maximum number of lines to keep in the radio label
 @export var max_lines: int = 5
 
 
 func _ready() -> void:
-	spice_amount_label.text = "No Spice"
+	pass
 
 
 func _process(delta: float) -> void:
-	# Update spice tracker label
+	update_base_money()
 	update_base_spice_tracker()
 	update_radio_chatter()
 
@@ -26,7 +27,6 @@ func update_radio_chatter():
 	for entry in recent_messages:
 		output_text += "[%s]: %s\n" % [entry["sender"], entry["message"]]
 	radio_label.text = output_text
-	
 
 func update_base_spice_tracker():
 	# Update spice tracker label
@@ -35,6 +35,14 @@ func update_base_spice_tracker():
 		GameManager.base_manager.base_max_spice_storage
 		]
 
+func update_base_money():
+	money_label.text = "$%.2f" % GameManager.money
+
+
 
 func _on_radio_button_pressed() -> void:
 	print(GameManager.ui_manager.radio_chatter)
+
+
+func _on_end_day_button_pressed() -> void:
+	GameManager.ui_manager.end_day()

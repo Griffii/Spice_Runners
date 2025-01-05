@@ -227,6 +227,7 @@ func load_ui_widget():
 			ui_widget.set_crawler(self)
 			# Add the widget as a child of the container
 			crawler_info_container.add_child(ui_widget)
+			print("Loaded Crawler Widget.")
 		else:
 			print("CrawlerInfoContainer not found!")
 	else:

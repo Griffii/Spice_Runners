@@ -4,10 +4,16 @@ extends Node2D
 @onready var canvaslayer: CanvasLayer = $CanvasLayer
  
 @export var in_game_ui: PackedScene
+@export var day_end_scene: PackedScene
 var game_ui_instance: Control = null
+var day_end_instance: Control = null
 
-# Radio chatter foramter {Sender: Message}
+# Radio chatter format {Sender: Message}
 var radio_chatter: Array
+
+var end_day_button = null
+
+
 
 func get_game_ui() -> Control:
 	return game_ui_instance
@@ -27,38 +33,41 @@ func load_main_menu():
 	else:
 		print("Failed to load Main Menu.")
 
+
+# Load into the first tutorial level map
 func start_tutorial():
 	print("Starting tutorial...")
-	
-	# Unload scene
-	if GameManager.current_scene:
-		GameManager.current_scene.queue_free()
-		GameManager.current_scene = null
-	
-	# Load tutorial map
-	if GameManager.level_manager:
-		GameManager.level_manager.load_level("res://levels/tutorial/tutorial_level_01.tscn")
-	else:
-		print ("Level Manager not found!")
-	
-	# Load the base
-	if GameManager.base_manager:
-		GameManager.base_manager.load_base()
-	else:
-		print("Base Manager not found!")
-	
-	# Load UI
-	load_gameplay_ui()
+	GameManager.level_manager.in_tutorial = true
+	GameManager.load_next_level()
 
 
+# Load gameplay UI overlay
 func load_gameplay_ui():
 	if in_game_ui:
 		game_ui_instance = in_game_ui.instantiate()
 		canvaslayer.add_child(game_ui_instance)
-		
+		# Add End Day button reference
+		end_day_button = game_ui_instance.get_node("EndDayButton")
 		print("Game UI loaded.")
 	else:
 		print("Game UI failed to load.")
+
+func unload_gameplay_ui():
+	canvaslayer.get_node("game_ui").queue_free()
+
+# Load End of Day screen before unloading the level and calling the next level
+func end_day():
+	# Load End Day Screen
+	day_end_instance = day_end_scene.instantiate()
+	canvaslayer.add_child(day_end_instance)
+
+# Collects and unloads all currently loaded ui scenes
+func unload_all_ui():
+	var loaded_ui = canvaslayer.get_children()
+	for i in loaded_ui:
+		i.queue_free()
+
+
 
 func radio_message(sender: String, message: String):
 	# Add the new sender-message pair as a dictionary

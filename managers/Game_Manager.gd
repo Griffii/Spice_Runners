@@ -6,8 +6,11 @@ extends Node2D
 @onready var ui_manager = get_node("/root/Main_Scene/UI_Manager")
 @onready var audio_manager = get_node("/root/Main_Scene/Audio_Manager")
 
-# Reference to the currently loaded Main Menu scene
+# Reference to the currently loaded scene
 var current_scene: Node = null
+
+# Reference to players money
+var money: float = 0.0
 
 
 func _ready() -> void:
@@ -15,9 +18,39 @@ func _ready() -> void:
 
 
 func get_current_map() -> TileMapLayer:
-	var current_map = level_manager.get_level_tile_data()
+	var current_map = level_manager.current_level.tilemap
 	return current_map
 
+
+func load_next_level():
+	# Free current scene
+	if current_scene:
+		current_scene.queue_free()
+		current_scene = null
+	
+	if level_manager:
+		if level_manager.in_tutorial == true:
+			level_manager.load_tutorial()
+		else:
+			# Load random level
+			print("Only tutorial levels are currently available.")
+	
+	
+	# Load the base
+	if base_manager:
+		base_manager.load_base()
+	else:
+		print("Base Manager not found!")
+	
+	# Load UI
+	if ui_manager:
+		ui_manager.load_gameplay_ui()
+	else:
+		print("UI Manager not found!")
+	
+	# Load Audio
+	## When I set it up...
+	
 
 
 ###############################################################################
